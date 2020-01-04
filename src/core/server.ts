@@ -62,10 +62,12 @@ export class Server {
 
     /**
      * Starts the server and logs to console when running.
+     * Returns an instance of the server.
      */
-    public start() {
+    public start(): Server {
         const { apiVersion, port } = this.config;
         this._server = this._app.listen(this.config.port, () =>
             console.info(`API version ${apiVersion} is running on port ${port}`));
+        return this;
     }
 }
