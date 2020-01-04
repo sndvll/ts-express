@@ -11,7 +11,7 @@
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/app.ts"
   },
   "author": "emil sundvall",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.1",
