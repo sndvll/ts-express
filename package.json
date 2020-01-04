@@ -3,10 +3,12 @@
   "version": "0.0.1",
   "description": "Typescript and express app for simple api development.",
   "scripts": {
-    "start": "node",
+    "start": "tsc && node ./dist/app.js",
     "dev": "npm run lint && npm run watch",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
     "lint": "tslint --project .",
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/app.ts"
   },
@@ -27,8 +29,11 @@
     "validator": "^12.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.25",
     "@types/node": "^13.1.4",
+    "jest": "^24.9.0",
     "nodemon": "^2.0.2",
+    "ts-jest": "^24.2.0",
     "ts-node": "^8.5.4",
     "tslint": "^5.20.1",
     "typescript": "^3.7.4"
