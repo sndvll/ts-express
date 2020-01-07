@@ -4,6 +4,7 @@ import { EntityRepository } from '../repository/EntityRepository';
 import { BaseEntity } from '../entity/BaseEntity';
 import { Log, validate } from '../decorators';
 import { EntityTypeInstance, EntityFactory } from '../entity';
+import { BaseRepository } from '../repository/BaseRepository';
 
 /**
  * Entity router.
@@ -12,15 +13,13 @@ import { EntityTypeInstance, EntityFactory } from '../entity';
 export class EntityRouter<T extends BaseEntity> {
 
     private _router: Router;
-    private repo: EntityRepository<T>;
 
     get router(): Router {
         return this._router;
     }
 
-    constructor(public name: string, private classRef: EntityTypeInstance<T>) {
+    constructor(public name: string, private classRef: EntityTypeInstance<T>, private repo: BaseRepository<T>) {
         this._router = express.Router();
-        this.repo = new EntityRepository<T>(name);
         this.addEntityRoutes();
     }
 

@@ -1,15 +1,21 @@
 import { Server } from './core/Server';
 import Example from './entites/example';
+import { EntityRepository } from './core';
 
 /**
  * Create a new Server and add entities.
- * addEntity() returns the server instance so when done just call start().
- *
- * This example is using a simple instance of JsonDB that holds the
- * entitis in a .json-file in the root folder.
- * One can easily create a new repository that connects to database
+ * If you wish, add cors origins, applyBodyparser or any other middleware by chaining
+ * the implemented functions.
+ * Create an entity class and then call addEntity() as shown below.
+ * The class EntityRepository is using a simple instance of JsonDB that holds the
+ * entites in a .json-file in the root folder.
+ * One can easily create a new repository that extends BaseRepository that connects to database
  * of choice.
+ *
+ * When done call just start() and a complete CRUD server should start.
  */
 new Server()
-    .addEntity<Example>(Example)
+    .useCors()
+    .applyBodyParser()
+    .addEntity<Example>(Example, new EntityRepository<Example>('example'))
     .start();
