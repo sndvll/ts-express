@@ -1,8 +1,9 @@
 import shortid from 'shortid';
 import express, { Router, Request, Response } from 'express';
-import { EntityRepository } from '../repository/EnitityRepository';
-import { BaseEntity, EntityTypeInstance, EntityFactory } from '../entity/BaseEntity';
+import { EntityRepository } from '../repository/EntityRepository';
+import { BaseEntity } from '../entity/BaseEntity';
 import { Log, validate } from '../decorators';
+import { EntityTypeInstance, EntityFactory } from '../entity';
 
 /**
  * Entity router.
@@ -23,7 +24,7 @@ export class EntityRouter<T extends BaseEntity> {
         this.addEntityRoutes();
     }
 
-    public addEntityRoutes() {
+    private addEntityRoutes() {
         this._router
             .post('/', (req, res) => this.createEntity(req, res))
             .get('/', (req, res) => this.fetchAllEntities(req, res))

@@ -1,4 +1,4 @@
-import { Server } from './core/server';
+import { Server } from './core/Server';
 import Example from './entites/example';
 
 /**
