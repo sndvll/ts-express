@@ -1,5 +1,5 @@
 import { Server } from './core/server';
-import Example from './entites/example';
+import Example from './entites/Example';
 
 /**
  * Create a new Server and add entities.
