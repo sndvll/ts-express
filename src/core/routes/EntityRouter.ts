@@ -1,6 +1,6 @@
 import shortid from 'shortid';
 import express, { Router, Request, Response } from 'express';
-import { EntityRepository } from '../repository/EntityRepository';
+import { JsonDbRepository } from '../repository/JsonDbRepository';
 import { BaseEntity } from '../entity/BaseEntity';
 import { Log, validate } from '../decorators';
 import { EntityTypeInstance, EntityFactory } from '../entity';
@@ -18,7 +18,7 @@ export class EntityRouter<T extends BaseEntity> {
         return this._router;
     }
 
-    constructor(public name: string, private classRef: EntityTypeInstance<T>, private repo: BaseRepository<T>) {
+    constructor(private classRef: EntityTypeInstance<T>, private repo: BaseRepository<T>) {
         this._router = express.Router();
         this.addEntityRoutes();
     }
@@ -44,6 +44,7 @@ export class EntityRouter<T extends BaseEntity> {
 
     @Log
     private createEntity(req: Request, res: Response) {
+        console.log(req.body);
         const newEntity = EntityFactory.fromPersistenceObject<T>(req.body, this.classRef);
         const errorMap = validate(newEntity);
         if (Object.keys(errorMap).length > 0) {

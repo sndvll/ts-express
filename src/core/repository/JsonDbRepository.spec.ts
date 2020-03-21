@@ -1,4 +1,4 @@
-import { EntityRepository } from './EntityRepository';
+import { JsonDbRepository } from './JsonDbRepository';
 import { BaseEntity } from '../entity';
 
 class MockEntity implements BaseEntity {
@@ -16,11 +16,11 @@ jest.mock('node-json-db', () => ({
     }))
 }));
 
-describe('EntityRepository tests', () => {
-    let repo: EntityRepository<MockEntity>;
+describe('JsonDbRepository tests', () => {
+    let repo: JsonDbRepository<MockEntity>;
 
     beforeEach(() => {
-        repo = new EntityRepository<MockEntity>('mock');
+        repo = new JsonDbRepository<MockEntity>('mock');
     });
 
     it('should create a entity repository instance', () => {

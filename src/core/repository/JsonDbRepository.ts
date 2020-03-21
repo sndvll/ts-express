@@ -9,7 +9,7 @@ import { BaseEntity } from '../entity/BaseEntity'
  * In this version JsonDB is used. Replace JsonDB with database of choice,
  * tentatively MongoDB and Mongoose.
  */
-export class EntityRepository<T extends BaseEntity> extends BaseRepository<T> {
+export class JsonDbRepository<T extends BaseEntity> extends BaseRepository<T> {
 
     private _db: JsonDB;
 

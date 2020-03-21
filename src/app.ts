@@ -1,6 +1,6 @@
 import { Server } from './core/Server';
 import Example from './entites/example';
-import { EntityRepository } from './core';
+import { JsonDbRepository } from './core';
 
 /**
  * Create a new Server and add entities.
@@ -17,5 +17,5 @@ import { EntityRepository } from './core';
 new Server()
     .useCors()
     .applyBodyParser()
-    .addEntity<Example>(Example, new EntityRepository<Example>('example'))
+    .addEntity<Example>(Example, new JsonDbRepository<Example>('example'))
     .start();

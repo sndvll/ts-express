@@ -5,7 +5,7 @@ import 'reflect-metadata';
 
 import { BaseEntity } from './entity/BaseEntity';
 import { EntityRouter } from './routes/EntityRouter';
-import { EntityRepository } from './repository/EntityRepository';
+import { JsonDbRepository } from './repository/JsonDbRepository';
 import { BaseRepository } from './repository/BaseRepository';
 
 /**
@@ -77,7 +77,7 @@ export class Server {
      */
     public addEntity<T extends BaseEntity>(clazz: any, repo: BaseRepository<T>): Server {
         const name = Reflect.getMetadata('entity:name', clazz);
-        this._app.use(`/${this.apiVersion}/${name}`, new EntityRouter<T>(name, clazz, repo).router);
+        this._app.use(`/${this.apiVersion}/${name}`, new EntityRouter<T>(clazz, repo).router);
         return this;
     }
 
