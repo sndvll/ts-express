@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import { Server } from './core/Server';
 import Example from './entites/example';
 import { EntityRepository } from './core';
-=======
-import { Server } from './core/server';
-import Example from './entites/Example';
->>>>>>> 6a4601f4be38873835505be95c33e30be1121d49
 
 /**
  * Create a new Server and add entities.
