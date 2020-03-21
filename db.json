@@ -8,5 +8,12 @@
             "id": "ndG9dCYk",
             "data": "posted test data"
         }
+    },
+    "example": {
+        "1GuUm_q7j": {
+            "id": "1GuUm_q7j",
+            "data": "posted test data updated",
+            "aNumber": 10
+        }
     }
 }
