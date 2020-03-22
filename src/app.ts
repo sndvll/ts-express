@@ -1,6 +1,7 @@
 import { Server } from './core/Server';
-import Example from './entites/example';
+import Example from './entites/Example';
 import { JsonDbRepository } from './core';
+import {MongoRepository} from './core/repository/MongoRepository';
 
 /**
  * Create a new Server and add entities.
@@ -17,5 +18,6 @@ import { JsonDbRepository } from './core';
 new Server()
     .useCors()
     .applyBodyParser()
-    .addEntity<Example>(Example, new JsonDbRepository<Example>('example'))
+    // .addEntity<Example>(Example, new JsonDbRepository<Example>('example'))
+    .addEntity<Example>(Example, new MongoRepository<Example>('mongodb://admin:password@localhost:27000', 'example'))
     .start();

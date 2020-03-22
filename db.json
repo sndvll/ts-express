@@ -10,11 +10,6 @@
         }
     },
     "example": {
-        "1GuUm_q7j": {
-            "id": "1GuUm_q7j",
-            "data": "posted test data updated",
-            "aNumber": 10
-        },
         "NxndJS2lA": {
             "id": "NxndJS2lA",
             "data": "test",
@@ -22,6 +17,21 @@
         },
         "MWA6S2P0F": {
             "id": "MWA6S2P0F",
+            "data": "test",
+            "aNumber": 1
+        },
+        "NWe0pvyb-": {
+            "id": "NWe0pvyb-",
+            "data": "test",
+            "aNumber": 1
+        },
+        "8x-S2cto8": {
+            "id": "8x-S2cto8",
+            "data": "test",
+            "aNumber": 1
+        },
+        "vLkqgBo1T": {
+            "id": "vLkqgBo1T",
             "data": "test",
             "aNumber": 1
         }

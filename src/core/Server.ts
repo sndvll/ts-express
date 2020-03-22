@@ -5,7 +5,6 @@ import 'reflect-metadata';
 
 import { BaseEntity } from './entity/BaseEntity';
 import { EntityRouter } from './routes/EntityRouter';
-import { JsonDbRepository } from './repository/JsonDbRepository';
 import { BaseRepository } from './repository/BaseRepository';
 
 /**

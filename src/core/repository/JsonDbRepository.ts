@@ -14,30 +14,41 @@ export class JsonDbRepository<T extends BaseEntity> extends BaseRepository<T> {
     private _db: JsonDB;
 
     constructor(public name: string) {
-        super(name);
+        super();
         this._db = new JsonDB(new Config('db', true, true, '/'));
     }
 
-    public fetchAll(): T[] {
-        return this._db.getData(`/${this.name}`);
+    public fetchAll() {
+        return new Promise<T[]>(((resolve, reject) => {
+            resolve(Object.values(this._db.getData(`/${this.name}`)))
+        }));
     }
 
-    public fetchOne(id: string): T {
-        return this._db.getData(`/${this.name}/${id}`)
+    public fetchOne(id: string) {
+        return new Promise<T>(((resolve, reject) => {
+            resolve(this._db.getData(`/${this.name}/${id}`))
+        }));
     }
 
-    public create(entity: T, idProperty: string): T {
-        this._db.push(`/${this.name}/${entity[idProperty]}`, entity.getPersistenceObject());
-        return this._db.getData(`/${this.name}/${entity.id}`);
+    public create(entity: T) {
+        return new Promise<T>(((resolve, reject) => {
+            this._db.push(`/${this.name}/${entity.id}`, entity.getPersistenceObject());
+            resolve(this._db.getData(`/${this.name}/${entity.id}`))
+        }));
     }
 
-    public update(updatedData: any, id: string): T {
+    public update(updatedData: any, id: string) {
         this._db.push(`/${this.name}/${id}`, updatedData, false);
-        return this._db.getData(`/${this.name}/${id}`);
+        return new Promise<T>(((resolve, reject) => {
+            resolve(this._db.getData(`/${this.name}/${id}`))
+        }));
     }
 
-    public delete(id: string): void {
-        this._db.delete(`/${this.name}/${id}`);
+    public delete(id: string) {
+        return new Promise<T>(((resolve, reject) => {
+            this._db.delete(`/${this.name}/${id}`);
+            resolve();
+        }));
     }
 
 }

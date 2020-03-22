@@ -3,11 +3,11 @@
  */
 export abstract class BaseRepository<T> {
 
-    constructor(public name: string) {}
+    public route: string;
 
-    public abstract fetchAll(): T[];
-    public abstract fetchOne(id: string): T;
-    public abstract create(entity: T, idProperty: string): T;
-    public abstract update(updatedData: any, id: string): T;
-    public abstract delete(id: string): void;
+    public abstract fetchAll(): Promise<any[]>;
+    public abstract fetchOne(id: string): Promise<any>;
+    public abstract create(entity: T): Promise<any>;
+    public abstract update(updatedData: any, id: string): Promise<any>;
+    public abstract delete(id: string): Promise<any>;
 }
