@@ -1,6 +1,6 @@
 import { Server } from './Server';
 import { BaseEntity } from './entity/BaseEntity';
-import {JsonDbRepository} from './repository/JsonDbRepository';
+import { JsonDbRepository } from './repository/JsonDbRepository';
 
 jest.mock('./routes/EntityRouter', () => ({
     EntityRouter: jest.fn(() => ({

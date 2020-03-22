@@ -1,8 +1,7 @@
-import {BaseRepository} from './BaseRepository';
-import {BaseEntity} from '../entity';
-import {Collection, Db, MongoClient, MongoClientOptions} from 'mongodb';
+import { BaseRepository } from './BaseRepository';
+import { BaseEntity } from '../entity';
+import { Collection, Db, MongoClient, MongoClientOptions } from 'mongodb';
 import 'reflect-metadata';
-import Example from '../../entites/Example';
 
 const MONGO_CLIENT_DEFAULT_OPTIONS = {
     useUnifiedTopology: true

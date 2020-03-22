@@ -9,6 +9,8 @@ class MockRepository implements BaseRepository<MockEntity> {
     public update = jest.fn()
     public delete = jest.fn()
     constructor(public name: string) {}
+
+    route: string;
 }
 
 class MockEntity implements BaseEntity {

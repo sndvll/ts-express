@@ -1,9 +1,8 @@
 import { Server } from './core/Server';
-import Example from './entites/Example';
 import { JsonDbRepository } from './core';
-import {MongoRepository} from './core/repository/MongoRepository';
+import { MongoRepository } from './core/repository/MongoRepository';
 import Example2 from './entites/Example2';
-
+import Example from './entites/Example';
 
 /**
  * Create a new Server and add entities.
