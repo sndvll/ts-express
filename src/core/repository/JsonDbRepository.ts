@@ -16,6 +16,7 @@ export class JsonDbRepository<T extends BaseEntity> extends BaseRepository<T> {
     constructor(public name: string) {
         super();
         this._db = new JsonDB(new Config('db', true, true, '/'));
+        console.log(`JsonDB ${this.name} initialized`);
     }
 
     public fetchAll() {

@@ -1,14 +1,4 @@
 {
-    "test": {
-        "VoqpDUFu": {
-            "id": "VoqpDUFu",
-            "data": "posted test data updated"
-        },
-        "ndG9dCYk": {
-            "id": "ndG9dCYk",
-            "data": "posted test data"
-        }
-    },
     "example": {
         "NxndJS2lA": {
             "id": "NxndJS2lA",
@@ -34,6 +24,12 @@
             "id": "vLkqgBo1T",
             "data": "test",
             "aNumber": 1
+        }
+    },
+    "example2": {
+        "FcdEMFJKH": {
+            "id": "FcdEMFJKH",
+            "data": "test5"
         }
     }
 }

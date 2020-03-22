@@ -48,7 +48,7 @@ export class MongoRepository<T extends BaseEntity> extends BaseRepository<T> {
             .then(client => {
                 this._db = client.db(this.dbName);
                 this._collection = this._db.collection(this.route);
-                console.log('Connected to database: ' + this._db.databaseName);
+                console.log('Connected to mongo database: ' + this._db.databaseName);
                 console.log(`Collection: ${this.route}`);
             })
             .catch(err => console.log('Mongo connection error:', err));

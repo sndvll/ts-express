@@ -111,8 +111,7 @@ export class EntityRouter<T extends BaseEntity> {
 
     private _handleError(error: any | Error, res: Response) {
         // TODO HANDLE ERRORS IN A CORRECT MANNER FROM REPOS!
-        console.log('error', error);
-        res.status(500).send(error.message);
+        console.log('error', error.message);
+        res.status(500).send({error: 500, message: error.message});
     }
-
 }
