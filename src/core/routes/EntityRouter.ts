@@ -1,8 +1,9 @@
 import shortid from 'shortid';
 import express, { Router, Request, Response } from 'express';
-import { EntityRepository } from '../repository/EnitityRepository';
-import { BaseEntity, EntityTypeInstance, EntityFactory } from '../entity/BaseEntity';
+import { BaseEntity } from '../entity/BaseEntity';
 import { Log, validate } from '../decorators';
+import { EntityTypeInstance, EntityFactory } from '../entity';
+import { BaseRepository } from '../repository/BaseRepository';
 
 /**
  * Entity router.
@@ -10,20 +11,19 @@ import { Log, validate } from '../decorators';
  */
 export class EntityRouter<T extends BaseEntity> {
 
-    private _router: Router;
-    private repo: EntityRepository<T>;
+    private readonly _router: Router;
 
     get router(): Router {
         return this._router;
     }
 
-    constructor(public name: string, private classRef: EntityTypeInstance<T>) {
+    constructor(private classRef: EntityTypeInstance<T>, private repo: BaseRepository<T>) {
         this._router = express.Router();
-        this.repo = new EntityRepository<T>(name);
+        this.repo.route = Reflect.getMetadata('entity:name', this.classRef);
         this.addEntityRoutes();
     }
 
-    public addEntityRoutes() {
+    private addEntityRoutes() {
         this._router
             .post('/', (req, res) => this.createEntity(req, res))
             .get('/', (req, res) => this.fetchAllEntities(req, res))
@@ -33,60 +33,85 @@ export class EntityRouter<T extends BaseEntity> {
     }
 
     @Log
-    private fetchAllEntities(req: Request, res: Response) {
-        res.json(this.repo.fetchAll());
-    }
-
-    @Log
-    private fetchEntity(req: Request, res: Response) {
-        res.json(this.repo.fetchOne(req.params.id));
-    }
-
-    @Log
-    private createEntity(req: Request, res: Response) {
-        const newEntity = EntityFactory.fromPersistenceObject<T>(req.body, this.classRef);
-        const errorMap = validate(newEntity);
-        if (Object.keys(errorMap).length > 0) {
-            const output = { errors: errorMap };
-            res.status(400).json(output);
-            return;
-        }
-        const idProperty = Reflect.getMetadata('entity:id', newEntity);
-        newEntity[idProperty] = shortid.generate();
-        this.repo.create(newEntity, idProperty);
-        res.status(200).json(newEntity);
-    }
-
-    @Log
-    private updateEntity(req: Request, res: Response) {
-        let data = {} as T;
+    private async fetchAllEntities(req: Request, res: Response) {
         try {
-            data = this.repo.fetchOne(req.params.id);
-        } catch (err) {
-            res.status(404).json({ error: 'Object does not exist' });
-            return;
+            const result = await this.repo.fetchAll();
+            result.forEach(entity => delete entity['_id']);
+            res.json(result);
+        } catch (error) {
+            this._handleError(error, res);
         }
-
-        const updatedData = req.body;
-        const updatedObj = EntityFactory.fromPersistenceObject(data, this.classRef);
-        const propKeys = Object.keys(updatedData);
-        for (const propKey of propKeys) {
-            updatedObj[propKey] = updatedData[propKey];
-        }
-
-        const errorMap = validate(updatedObj);
-        if (Object.keys(errorMap).length > 0) {
-            const output = { errors: errorMap };
-            res.status(400).json(output);
-            return;
-        }
-        res.json(this.repo.update(updatedData, req.params.id));
     }
 
     @Log
-    private deleteEntity(req: Request, res: Response) {
-        this.repo.delete(req.params.id);
-        res.json({});
+    private async fetchEntity(req: Request, res: Response) {
+        try {
+            const entity = await this.repo.fetchOne(req.params.id);
+            delete entity['_id'];
+            res.json(entity);
+        } catch (error) {
+            this._handleError(error, res);
+        }
     }
 
+    @Log
+    private async createEntity(req: Request, res: Response) {
+        try {
+            const newEntity = EntityFactory.fromPersistenceObject<T>(req.body, this.classRef);
+            const errorMap = validate(newEntity);
+            if (Object.keys(errorMap).length > 0) {
+                const output = {errors: errorMap};
+                res.status(400).json(output);
+                return;
+            }
+            const id = Reflect.getMetadata('entity:id', newEntity);
+            newEntity[id] = shortid.generate();
+            await this.repo.create(newEntity);
+            res.status(200).json(newEntity);
+        } catch (error) {
+            this._handleError(error, res);
+        }
+    }
+
+    @Log
+    private async updateEntity(req: Request, res: Response) {
+
+        try {
+            const data = await this.repo.fetchOne(req.params.id);
+            delete data['_id'];
+            const updatedData = req.body;
+            const updatedObj = EntityFactory.fromPersistenceObject(data, this.classRef);
+            const propKeys = Object.keys(updatedData);
+            for (const propKey of propKeys) {
+                updatedObj[propKey] = updatedData[propKey];
+            }
+
+            const errorMap = validate(updatedObj);
+            if (Object.keys(errorMap).length > 0) {
+                const output = {errors: errorMap};
+                res.status(400).json(output);
+                return;
+            }
+            const entity = await this.repo.update(updatedData, req.params.id);
+            res.json(entity);
+        } catch (error) {
+            this._handleError(error, res);
+        }
+    }
+
+    @Log
+    private async deleteEntity(req: Request, res: Response) {
+        try {
+            await this.repo.delete(req.params.id);
+            res.send();
+        } catch (error) {
+            this._handleError(error, res);
+        }
+    }
+
+    private _handleError(error: any | Error, res: Response) {
+        // TODO HANDLE ERRORS IN A CORRECT MANNER FROM REPOS!
+        console.log('error', error.message);
+        res.status(500).send({error: 500, message: error.message});
+    }
 }

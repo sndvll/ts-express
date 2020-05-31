@@ -5,6 +5,8 @@
     ],
     "jsRules": {},
     "rules": {
+        "arrow-parens": false,
+        "no-empty": false,
         "no-console": [false],
         "only-arrow-functions": [true],
         "semicolon": [false],
@@ -23,7 +25,18 @@
                 "allow-pascal-case"
             ]
         },
-        "max-line-length": false
+        "max-line-length": false,
+        "no-string-literal": false,
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-separator",
+            "check-type",
+            "check-typecast",
+            "check-module"
+        ]
     },
     "rulesDirectory": []
 }

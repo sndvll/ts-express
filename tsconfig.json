@@ -13,6 +13,8 @@
     ],
     "exclude": [
         "node_modules",
-        ".vscode"
+        ".vscode",
+        ".idea",
+        "src/**/*.spec.ts"
     ]
 }
