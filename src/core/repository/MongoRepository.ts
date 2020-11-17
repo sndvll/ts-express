@@ -15,6 +15,7 @@ export class MongoRepository<T extends BaseEntity> extends BaseRepository<T> {
     constructor(private uri: string, private dbName: string, private options: MongoClientOptions = {}) {
         super();
         this._connect();
+        console.log(`MongoDB Entity "${this.dbName}" initialized`);
     }
 
     public create(entity: T) {

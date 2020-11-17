@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'reflect-metadata';
 
-import { BaseEntity } from './entity/BaseEntity';
+import { BaseEntity } from './entity';
 import { EntityRouter } from './routes/EntityRouter';
 import { BaseRepository } from './repository/BaseRepository';
 
@@ -17,9 +17,10 @@ export class Server {
 
     /**
      * Server constructor.
+     * @param apiUrl
      * @param apiVersion    Optional. Sets the apiVersion for all routes.
      */
-    constructor(private apiVersion: string = 'v1') {
+    constructor(private apiUrl = 'api', private apiVersion: string = 'v1') {
         this._app = express();
     }
 
@@ -73,10 +74,13 @@ export class Server {
      * Adds an entity and creates a entity router.
      * Returns an instance of the server for chaining when creating the server.
      * @param clazz     the entity class
+     * @param repo
      */
     public addEntity<T extends BaseEntity>(clazz: any, repo: BaseRepository<T>): Server {
         const name = Reflect.getMetadata('entity:name', clazz);
-        this._app.use(`/${this.apiVersion}/${name}`, new EntityRouter<T>(clazz, repo).router);
+        const route = `/${this.apiUrl}/${this.apiVersion}/${name}`;
+        console.log(`Route: ${route}`)
+        this._app.use(route, new EntityRouter<T>(clazz, repo).router);
         return this;
     }
 
@@ -85,7 +89,7 @@ export class Server {
      * Returns an instance of the server.
      */
     public start(): Server {
-        this._app.listen(this._port, () => console.info(`API version ${this.apiVersion} is running on port ${this._port}`));
+        this._app.listen(this._port, () => console.info(`Server is running on port ${this._port}`));
         return this;
     }
 }

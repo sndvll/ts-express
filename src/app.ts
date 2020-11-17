@@ -23,6 +23,7 @@ import Example from './entites/Example';
 new Server()
     .useCors()
     .applyBodyParser()
-    .addEntity<Example>(Example, new MongoRepository<Example>('mongodb://admin:password@localhost:27000', 'example'))
+    // .addEntity<Example>(Example, new MongoRepository<Example>('mongodb://admin:password@localhost:27000', 'example'))
+    .addEntity<Example>(Example, new JsonDbRepository<Example>('example'))
     .addEntity<Example2>(Example2, new JsonDbRepository<Example>('example2'))
     .start();
