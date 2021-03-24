@@ -10,6 +10,6 @@ export default class Example2 extends BaseEntity {
     @Persist
     @Required
     @Length(1, 200)
-    public data: string;
+    public data!: string;
 
 }

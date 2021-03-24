@@ -13,11 +13,11 @@ export default class Example extends BaseEntity {
     @Persist
     @Required
     @Length(1, 200)
-    public data: string;
+    public data!: string;
 
     @Persist
     @Required
     @IsInteger(1, 10)
-    public aNumber: number;
+    public aNumber!: number;
 
 }

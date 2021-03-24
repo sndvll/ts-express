@@ -25,18 +25,18 @@ export class EntityRouter<T extends BaseEntity> {
 
     private addEntityRoutes() {
         this._router
-            .post('/', (req, res) => this.createEntity(req, res))
-            .get('/', (req, res) => this.fetchAllEntities(req, res))
-            .get('/:id', (req, res) => this.fetchEntity(req, res))
-            .put('/:id', (req, res) => this.updateEntity(req, res))
-            .delete('/:id', (req, res) => this.deleteEntity(req, res));
+            .post('/', (req, res): void => void this.createEntity(req, res))
+            .get('/', (req, res) => void this.fetchAllEntities(req, res))
+            .get('/:id', (req, res) => void this.fetchEntity(req, res))
+            .put('/:id', (req, res) => void this.updateEntity(req, res))
+            .delete('/:id', (req, res) => void this.deleteEntity(req, res));
     }
 
     @Log
-    private async fetchAllEntities(req: Request, res: Response) {
+    private async fetchAllEntities(req: Request, res: Response): Promise<void> {
         try {
             const result = await this.repo.fetchAll();
-            result.forEach(entity => delete entity['_id']);
+            result.forEach((entity: any) => delete entity['_id']); // Funky any typing here for the mongo obj
             res.json(result);
         } catch (error) {
             this._handleError(error, res);
@@ -46,7 +46,7 @@ export class EntityRouter<T extends BaseEntity> {
     @Log
     private async fetchEntity(req: Request, res: Response) {
         try {
-            const entity = await this.repo.fetchOne(req.params.id);
+            const entity: any = await this.repo.fetchOne(req.params.id); // Funky any typing here for the mongo obj
             delete entity['_id'];
             res.json(entity);
         } catch (error) {
@@ -64,7 +64,7 @@ export class EntityRouter<T extends BaseEntity> {
                 res.status(400).json(output);
                 return;
             }
-            const id = Reflect.getMetadata('entity:id', newEntity);
+            const id: string = Reflect.getMetadata('entity:id', newEntity);
             newEntity[id] = shortid.generate();
             await this.repo.create(newEntity);
             res.status(200).json(newEntity);
@@ -77,9 +77,9 @@ export class EntityRouter<T extends BaseEntity> {
     private async updateEntity(req: Request, res: Response) {
 
         try {
-            const data = await this.repo.fetchOne(req.params.id);
+            const data: any = await this.repo.fetchOne(req.params.id);
             delete data['_id'];
-            const updatedData = req.body;
+            const updatedData: any = req.body;
             const updatedObj = EntityFactory.fromPersistenceObject(data, this.classRef);
             const propKeys = Object.keys(updatedData);
             for (const propKey of propKeys) {
@@ -111,7 +111,7 @@ export class EntityRouter<T extends BaseEntity> {
 
     private _handleError(error: any | Error, res: Response) {
         // TODO HANDLE ERRORS IN A CORRECT MANNER FROM REPOS!
-        console.log('error', error.message);
-        res.status(500).send({error: 500, message: error.message});
+        console.log('error', error?.message); //eslint-disable-line
+        res.status(500).send({error: 500, message: error?.message}); // eslint-disable-line
     }
 }

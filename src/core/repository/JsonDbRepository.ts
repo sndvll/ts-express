@@ -19,34 +19,34 @@ export class JsonDbRepository<T extends BaseEntity> extends BaseRepository<T> {
         console.log(`JsonDB Entity "${this.name}" initialized`);
     }
 
-    public fetchAll() {
+    public fetchAll(): Promise<T[]> {
         return new Promise<T[]>(((resolve, reject) => {
             resolve(Object.values(this._db.getData(`/${this.name}`)))
         }));
     }
 
-    public fetchOne(id: string) {
+    public fetchOne(id: string): Promise<T> {
         return new Promise<T>(((resolve, reject) => {
             resolve(this._db.getData(`/${this.name}/${id}`))
         }));
     }
 
-    public create(entity: T) {
+    public create(entity: T): Promise<T> {
         return new Promise<T>(((resolve, reject) => {
             this._db.push(`/${this.name}/${entity.id}`, entity.getPersistenceObject());
             resolve(this._db.getData(`/${this.name}/${entity.id}`))
         }));
     }
 
-    public update(updatedData: any, id: string) {
+    public update(updatedData: Partial<T>, id: string): Promise<T> {
         this._db.push(`/${this.name}/${id}`, updatedData, false);
         return new Promise<T>(((resolve, reject) => {
             resolve(this._db.getData(`/${this.name}/${id}`))
         }));
     }
 
-    public delete(id: string) {
-        return new Promise<T>(((resolve, reject) => {
+    public delete(id: string): Promise<void> {
+        return new Promise<void>(((resolve, reject) => {
             this._db.delete(`/${this.name}/${id}`);
             resolve();
         }));

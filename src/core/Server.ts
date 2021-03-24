@@ -1,5 +1,4 @@
-import express, { Express } from 'express';
-import bodyParser from 'body-parser';
+import express, { Express, RequestHandler } from 'express';
 import cors from 'cors';
 import 'reflect-metadata';
 
@@ -39,10 +38,10 @@ export class Server {
      * Returns an instance of the server for chaining when creating the server.
      * @param extended      Optional. urlEncoded extended. Default is true.
      */
-    public applyBodyParser(extended: boolean = true): Server {
+    public applyBodyParser(): Server {
         this._app
-            .use(bodyParser.json())
-            .use(bodyParser.urlencoded({ extended }))
+            .use(express.json())
+            .use(express.urlencoded())
         return this;
     }
 
@@ -61,7 +60,7 @@ export class Server {
      * Returns an instance of the server for chaining when creating the server.
      * @param middleware    the middleware, any type.
      */
-    public applyMiddleware(middleware: any): Server {
+    public applyMiddleware(middleware: RequestHandler): Server {
         try {
             this._app.use(middleware);
         } catch (error) {
@@ -76,8 +75,8 @@ export class Server {
      * @param clazz     the entity class
      * @param repo
      */
-    public addEntity<T extends BaseEntity>(clazz: any, repo: BaseRepository<T>): Server {
-        const name = Reflect.getMetadata('entity:name', clazz);
+    public addEntity<T extends BaseEntity>(clazz: any, repo: BaseRepository<T>): Server { // eslint-disable-line
+        const name: string = Reflect.getMetadata('entity:name', clazz);
         const route = `/${this.apiUrl}/${this.apiVersion}/${name}`;
         console.log(`Route: ${route}`)
         this._app.use(route, new EntityRouter<T>(clazz, repo).router);

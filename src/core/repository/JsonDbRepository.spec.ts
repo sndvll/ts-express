@@ -29,13 +29,13 @@ describe('JsonDbRepository tests', () => {
 
     it('should call the db getData function when fetching all', () => {
         const spy = spyOn(repo['_db'], 'getData').and.stub();
-        repo.fetchAll();
+        void repo.fetchAll();
         expect(spy).toBeCalledWith('/mock');
     });
 
     it('should call the db getData function when fetching one', () => {
         const spy = spyOn(repo['_db'], 'getData').and.stub();
-        repo.fetchOne('1');
+        void repo.fetchOne('1');
         expect(spy).toBeCalledWith('/mock/1');
     });
 });

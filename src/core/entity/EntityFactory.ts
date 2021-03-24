@@ -3,7 +3,7 @@ import 'reflect-metadata';
 export type EntityTypeInstance<T> = new (...args: any[]) => T;
 
 export interface IEntity {
-    id: string;
+    _id?: string;
     getPersistenceObject(): any;
 }
 
@@ -11,8 +11,8 @@ export interface IEntity {
  * Entity factory class for entity input in routes.
  */
 export class EntityFactory {
-    public static fromPersistenceObject<T extends IEntity>(obj: T, type: EntityTypeInstance<T>): T {
-        const out = new type();
+    public static fromPersistenceObject<T extends IEntity>(obj: any, type: EntityTypeInstance<T>): any { //eslint-disable-line
+        const out: any = new type();
         const persistedProps: string[] = Reflect.getMetadata('entity:properties', out) || [];
         const idProp = Reflect.getMetadata('entity:id', out);
         const props = Object.keys(obj);
@@ -20,9 +20,9 @@ export class EntityFactory {
             if (persistedProps.includes(prop) || prop === idProp) {
                 out[prop] = obj[prop];
             } else {
-                throw new Error(`Property ${prop} not defined in ${type}`);
+                throw new Error(`Property ${prop} not defined in ${type.toString()}`);
             }
         }
-        return out;
+        return out; //eslint-disable-line
     }
 }

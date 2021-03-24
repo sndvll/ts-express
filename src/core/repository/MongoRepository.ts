@@ -9,8 +9,8 @@ const MONGO_CLIENT_DEFAULT_OPTIONS = {
 
 export class MongoRepository<T extends BaseEntity> extends BaseRepository<T> {
 
-    private _db: Db;
-    private _collection: Collection<any>;
+    private _db!: Db;
+    private _collection!: Collection<any>;
 
     constructor(private uri: string, private dbName: string, private options: MongoClientOptions = {}) {
         super();
@@ -18,33 +18,31 @@ export class MongoRepository<T extends BaseEntity> extends BaseRepository<T> {
         console.log(`MongoDB Entity "${this.dbName}" initialized`);
     }
 
-    public create(entity: T) {
+    public create(entity: T): Promise<unknown> {
         return this._collection.insertOne({...entity});
     }
 
-    public delete(id: string) {
+    public delete(id: string): Promise<unknown> {
         return this._collection.findOneAndDelete({id});
     }
 
-    public fetchAll() {
-        return this._collection.find().toArray();
+    public fetchAll(): Promise<T[]>  {
+        return this._collection.find().toArray() as Promise<T[]>;
     }
 
-    public fetchOne(id: string) {
-        return this._collection.findOne({id});
+    public fetchOne(id: string): Promise<T>  {
+        return this._collection.findOne({id}) as Promise<T>;
     }
 
-    public update(updatedData: any, id: string) {
-        return this._collection.findOneAndUpdate({id}, {$set: updatedData})
-            .then(() => this._collection.findOne({id}))
-            .then(res => {
-                const entity = {...res};
-                delete entity['_id'];
-                return entity;
-            });
+    public async update(updatedData: Partial<T>, id: string): Promise<T>  { //eslint-disable-line
+        await this._collection.findOneAndUpdate({ id }, { $set: updatedData });
+        const res = await this._collection.findOne({ id });
+        const entity: any = { ...res }; // Funky any typing here for the mongo obj
+        delete entity['_id'];
+        return entity; //eslint-disable-line
     }
 
-    private _connect() {
+    private _connect(): void {
         MongoClient.connect(this.uri, {...MONGO_CLIENT_DEFAULT_OPTIONS, ...this.options})
             .then(client => {
                 this._db = client.db(this.dbName);

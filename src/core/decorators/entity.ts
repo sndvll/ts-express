@@ -5,7 +5,7 @@ import 'reflect-metadata';
  * @param name              the entity name.
  */
 const entity = (name: string) => {
-    return (constructor: any) => {
+    return (constructor: any): void => { //eslint-disable-line
         Reflect.defineMetadata('entity:name', name, constructor);
     }
 }
@@ -15,7 +15,7 @@ const entity = (name: string) => {
  * @param entity            the entity
  * @param entityProperty    the entity property.
  */
-const persist = (entity: any, entityProperty: string) => {
+const persist = (entity: any, entityProperty: string): void => { //eslint-disable-line
     const objectProperties: string[] = Reflect.getMetadata('entity:properties', entity) || [];
     if (!objectProperties.includes(entityProperty)) {
         objectProperties.push(entityProperty);
@@ -28,7 +28,7 @@ const persist = (entity: any, entityProperty: string) => {
  * @param entity            the entity.
  * @param entityProperty    the entity property.
  */
-const id = (entity: any, entityProperty: string) => {
+const id = <T>(entity: T, entityProperty: string): void => {
     Reflect.defineMetadata('entity:id', entityProperty, entity);
 }
 

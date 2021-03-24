@@ -21,21 +21,17 @@ describe('Server tests', () => {
         server = new Server();
     });
 
-    it('should create an instance of the server with default config and default origins', () => {
-        expect(server).toBeDefined();
-        expect(server['config'].port).toBe(5000);
-        expect(server['config'].apiVersion).toBe('v1');
-        expect(server['config'].origins).toEqual(['http://localhost:4200', 'http://localhost:3000']);
+    it('should create an instance of the server', () => {
         expect(server['_app']).toBeDefined();
     });
 
     it('should create a server with custom config', () => {
-        server = new Server('v2')
+        server = new Server('server', 'v2')
             .setPort(2000)
             .useCors(['http://someOrigin']);
-        expect(server['config'].port).toBe(2000);
-        expect(server['config'].apiVersion).toBe('v2');
-        expect(server['config'].origins).toEqual(['http://someOrigin']);
+        expect(server['_port']).toBe(2000);
+        expect(server['apiUrl']).toBe('server');
+        expect(server['apiVersion']).toBe('v2');
         expect(server['_app']).toBeDefined();
     });
 

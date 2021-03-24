@@ -12,12 +12,12 @@ interface ValidationRule {
  * Function that validates the property input.
  * @param entity    The entity.
  */
-const validate = (entity: any) => {
+const validate = (entity: any): any => { //eslint-disable-line
     const keys = Reflect.getMetadata('validation:properties', entity) as string[];
-    const errorMap = {};
+    const errorMap: any = {};
 
     if (!keys || !Array.isArray(keys)) {
-        return errorMap;
+        return errorMap; //eslint-disable-line
     }
 
     for (const key of keys) {
@@ -34,7 +34,7 @@ const validate = (entity: any) => {
         }
     }
 
-    return errorMap;
+    return errorMap; //eslint-disable-line
 }
 
 /**
@@ -73,7 +73,7 @@ const lengthValidator = (target: any, propertyKey: string, validatorOptions: any
         min: validatorOptions.minimum,
         max: validatorOptions.maximum
     };
-    const isValid = validator.isLength(target[propertyKey] + '', options);
+    const isValid = validator.isLength(`${target[propertyKey]}`, options);
     if (!isValid) {
         return `Property ${propertyKey} must be a string between ${validatorOptions.minimum} and ${validatorOptions.maximum} in length`;
     }
@@ -119,7 +119,7 @@ const integerValidator = (target: any, propertyKey: string, validatorOptions: an
  * @param target        The target i.e. The entity.
  * @param propertyKey   The entity propert.
  */
-const required = (target: any, propertyKey: string) => {
+const required = (target: unknown, propertyKey: string): void => {
     addValidation(target, propertyKey, requiredValidatior);
 }
 
@@ -128,7 +128,7 @@ const required = (target: any, propertyKey: string) => {
  * @param minimum   The minimum amount of characters.
  * @param maximum   The maximum amount of characters.
  */
-const length = (minimum: number, maximum: number) => {
+const length = (minimum: number, maximum: number): (target: any, propertyKey: string) => void => {
     const options = {
         minimum,
         maximum
@@ -143,7 +143,7 @@ const length = (minimum: number, maximum: number) => {
  * @param minimum   The minimum allowed number.
  * @param maximum   The maximum allowed number.
  */
-const isInteger = (minimum: number, maximum: number) => {
+const isInteger = (minimum: number, maximum: number): (target: any, propertyKey: string) => void => {
     const options = {
         minimum,
         maximum
